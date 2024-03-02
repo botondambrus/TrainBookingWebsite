@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Vonattársaság</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link " href="/">Keresés</a>
+                </li>
+                <% if ( role==='admin' ) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/hozzaadas">Hozzáadás</a>
+                    </li>
+                    <% } %>
+                        <% if (role !=='vendeg' ) { %>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/foglalas/user">Foglalásaim</a>
+                            </li>
+                            <% } %>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <% if (role==='vendeg' ) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Bejelentkezés</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/regisztracio">Regisztráció</a>
+                    </li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                Felhasználó: <%= felhasznalonev %>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login/logout">Kijelentkezés</a>
+                        </li>
+                        <% } %>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <% if (query && query==='success' ) { %>
+            <div class="alert alert-success" role="alert">
+                Sikeres foglalás!
+            </div>
+            <% } else if (query && query==='error' ) { %>
+                <div class="alert alert-danger" role="alert">
+                    Sikertelen foglalás! <%= message %>
+                </div>
+                <% } else if (query && query==='successModositas' ) { %>
+                    <div class="alert alert-success" role="alert">
+                        Sikeres foglalás módosítás! <%= message %>
+                    </div>
+                    <% } else if (query && query==='errorModositas' ) { %>
+                        <div class="alert alert-danger" role="alert">
+                            Sikertelen foglalás módosítás! <%= message %>
+                        </div>
+                        <% } %>
+                            <br>
+                            <div class="text-center mb-3">
+                                <h3>
+
+                                    <%= felhasznalonev %> felhasználó foglalásai
+                                </h3>
+                                <br>
+                            </div>
+                            <table class="table table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Vonat száma</th>
+                                        <th>Dátum</th>
+                                        <th>Indulás</th>
+                                        <th>Érkezés</th>
+                                        <th>Indulás idő</th>
+                                        <th>Érkezés idő</th>
+                                        <th>Nap</th>
+                                        <th>Tipus</th>
+                                        <th>Ár</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% foglalasok.forEach(function(foglalas){ %>
+                                        <tr id="foglalasSor<%= foglalas.id %>">
+                                            <td>
+                                                <%= foglalas.jaratId %>
+                                            <td>
+                                                <%=foglalas.datum.toLocaleDateString('hu-HU') %>
+                                            </td>
+                                            <td>
+                                                <%= foglalas.indulas %>
+                                            </td>
+                                            <td>
+                                                <%= foglalas.erkezes %>
+                                            </td>
+                                            <td>
+                                                <%= foglalas.indulasiIdo %>
+                                            </td>
+                                            <td>
+                                                <%= foglalas.erkezesiIdo %>
+                                            </td>
+                                            <td>
+                                                <%= foglalas.nap %>
+                                            </td>
+                                            <td>
+                                                <%= foglalas.tipus %>
+                                            </td>
+                                            <td>
+                                                <%= foglalas.ar %>
+                                            </td>
+
+                                            <td>
+                                            <td>
+                                                <a href="/modositas/<%=foglalas.id %>"
+                                                    class="btn btn-outline-dark">Módositás</a>
+                                            </td>
+                                            </td>
+                                            <td>
+                                                <button type="button"
+                                                    class="btn btn-outline-danger foglalasTorlesButton"
+                                                    data-foglalas-id="<%= foglalas.id %>">Törlés</button>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+    </div>
+    <script src="/foglalasTorles.js"></script>
+</body>
+
+</html>
