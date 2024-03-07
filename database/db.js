@@ -2,9 +2,9 @@ import { createPool } from 'mysql2';
 
 const pool = createPool({
   host: 'localhost',
-  user: 'user',
-  password: 'password',
-  database: 'database',
+  user: 'root',
+  password: 'admin',
+  database: 'vonattarsasag',
 });
 
 function executeQuery(query, values) {

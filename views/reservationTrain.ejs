@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Railway Company</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link " href="/">Search</a>
+                </li>
+                <% if ( role==='admin' ) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/addition">Addition</a>
+                    </li>
+                    <% } %>
+                        <% if (role !=='guest' ) { %>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/reservation/user">My reservations</a>
+                            </li>
+                            <% } %>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <% if (role==='guest' ) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/registration">Registration</a>
+                    </li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                User: <%= username %>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/auth/logout">Logout</a>
+                        </li>
+                        <% } %>
+            </ul>
+        </div>
+    </nav>
+    <div>
+        <div>
+            <div class="mt-5 text-center">
+                <h3>Reservation for the train <%= trainId %>
+                </h3>
+            </div>
+        </div>
+        <div class="container" id="data">
+            <% if (transfer==true) { %>
+                <form method="POST" action="/reservation/trains/<%= trainId%>">
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date:</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" class="btn btn-primary" value="Save">
+                    </div>
+                </form>
+                <% } else { %>
+                    <form method="POST" action="/reservation/train/<%= trainId%>">
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Date:</label>
+                            <input type="date" class="form-control" id="date" name="date" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="submit" class="btn btn-primary" value="Save">
+                        </div>
+                    </form>
+                    <% } %>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <title>Vonattársaság</title>
+    <title>Railway company</title>
 </head>
 
 <body>
@@ -13,35 +13,35 @@
         <div class="container-fluid">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link " href="/">Keresés</a>
+                    <a class="nav-link " href="/">Search</a>
                 </li>
                 <% if ( role==='admin' ) { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="/hozzaadas">Hozzáadás</a>
+                        <a class="nav-link" href="/addition">Addition</a>
                     </li>
                     <% } %>
-                        <% if (role !=='vendeg' ) { %>
+                        <% if (role !=='guest' ) { %>
                             <li class="nav-item">
-                                <a class="nav-link active" href="/foglalas/user">Foglalásaim</a>
+                                <a class="nav-link active" href="/reservation/user">My reservations</a>
                             </li>
                             <% } %>
             </ul>
             <ul class="navbar-nav ms-auto">
-                <% if (role==='vendeg' ) { %>
+                <% if (role==='guest' ) { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="/login">Bejelentkezés</a>
+                        <a class="nav-link" href="/auth/login">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/regisztracio">Regisztráció</a>
+                        <a class="nav-link" href="/registration">Registration</a>
                     </li>
                     <% } else { %>
                         <li class="nav-item">
                             <a class="nav-link">
-                                Felhasználó: <%= felhasznalonev %>
+                                User: <%= username %>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/login/logout">Kijelentkezés</a>
+                            <a class="nav-link" href="/auth/logout">Logout</a>
                         </li>
                         <% } %>
             </ul>
@@ -50,93 +50,92 @@
     <div class="container mt-4">
         <% if (query && query==='success' ) { %>
             <div class="alert alert-success" role="alert">
-                Sikeres foglalás!
+                Successful reservation!
             </div>
             <% } else if (query && query==='error' ) { %>
                 <div class="alert alert-danger" role="alert">
-                    Sikertelen foglalás! <%= message %>
+                    Unsuccessful reservation! <%= message %>
                 </div>
-                <% } else if (query && query==='successModositas' ) { %>
+                <% } else if (query && query==='successModification' ) { %>
                     <div class="alert alert-success" role="alert">
-                        Sikeres foglalás módosítás! <%= message %>
+                        Successful modification!
                     </div>
-                    <% } else if (query && query==='errorModositas' ) { %>
+                    <% } else if (query && query==='errorModification' ) { %>
                         <div class="alert alert-danger" role="alert">
-                            Sikertelen foglalás módosítás! <%= message %>
+                            Unsuccessful modification! <%= message %>
                         </div>
                         <% } %>
                             <br>
                             <div class="text-center mb-3">
                                 <h3>
-
-                                    <%= felhasznalonev %> felhasználó foglalásai
+                                    <%= username %>'s reservations
                                 </h3>
                                 <br>
                             </div>
                             <table class="table table-striped text-center">
                                 <thead>
                                     <tr>
-                                        <th>Vonat száma</th>
-                                        <th>Dátum</th>
-                                        <th>Indulás</th>
-                                        <th>Érkezés</th>
-                                        <th>Indulás idő</th>
-                                        <th>Érkezés idő</th>
-                                        <th>Nap</th>
-                                        <th>Tipus</th>
-                                        <th>Ár</th>
+                                        <th>Train number</th>
+                                        <th>Date</th>
+                                        <th>Departure</th>
+                                        <th>Arrival</th>
+                                        <th>Departure time</th>
+                                        <th>Arrival time</th>
+                                        <th>Day</th>
+                                        <th>Type</th>
+                                        <th>Price</th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% foglalasok.forEach(function(foglalas){ %>
-                                        <tr id="foglalasSor<%= foglalas.id %>">
+                                    <% reservations.forEach(function(reservation){ %>
+                                        <tr id="reservationRow<%= reservation.id %>">
                                             <td>
-                                                <%= foglalas.jaratId %>
+                                                <%= reservation.trainId %>
                                             <td>
-                                                <%=foglalas.datum.toLocaleDateString('hu-HU') %>
+                                                <%=reservation.date.toLocaleDateString('en-US') %>
                                             </td>
                                             <td>
-                                                <%= foglalas.indulas %>
+                                                <%= reservation.departure %>
                                             </td>
                                             <td>
-                                                <%= foglalas.erkezes %>
+                                                <%= reservation.arrival %>
                                             </td>
                                             <td>
-                                                <%= foglalas.indulasiIdo %>
+                                                <%= reservation.departureTime %>
                                             </td>
                                             <td>
-                                                <%= foglalas.erkezesiIdo %>
+                                                <%= reservation.arrivalTime %>
                                             </td>
                                             <td>
-                                                <%= foglalas.nap %>
+                                                <%= reservation.day %>
                                             </td>
                                             <td>
-                                                <%= foglalas.tipus %>
+                                                <%= reservation.type %>
                                             </td>
                                             <td>
-                                                <%= foglalas.ar %>
+                                                <%= reservation.price %>
                                             </td>
 
                                             <td>
                                             <td>
-                                                <a href="/modositas/<%=foglalas.id %>"
-                                                    class="btn btn-outline-dark">Módositás</a>
+                                                <a href="/modification/<%=reservation.id %>"
+                                                    class="btn btn-outline-dark">Modify</a>
                                             </td>
                                             </td>
                                             <td>
                                                 <button type="button"
-                                                    class="btn btn-outline-danger foglalasTorlesButton"
-                                                    data-foglalas-id="<%= foglalas.id %>">Törlés</button>
+                                                    class="btn btn-outline-danger deleteReservationButton"
+                                                    data-reservation-id="<%= reservation.id %>">Delete</button>
                                             </td>
                                         </tr>
                                         <% }) %>
                                 </tbody>
                             </table>
     </div>
-    <script src="/foglalasTorles.js"></script>
+    <script src="/deleteReservation.js"></script>
 </body>
 
 </html>

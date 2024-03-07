@@ -2,9 +2,9 @@ import { executeQuery } from './db.js';
 
 async function getLogin(username) {
   const getLoginQuery = `
-        SELECT jelszo, role
-        FROM Felhasznalok
-        WHERE felhasznalonev = ?
+        SELECT password, role
+        FROM Users
+        WHERE username = ?
         `;
 
   try {

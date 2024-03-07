@@ -1,51 +1,51 @@
-function loadExtraInfo(jaratId) {
-  const extraInfoTable = document.getElementById(`extraInfo${jaratId}`);
-  const extraInfoAr = document.getElementById(`extraInfoAr${jaratId}`);
-  const extraInfoTipus = document.getElementById(`extraInfoTipus${jaratId}`);
+function loadExtraInfo(trainId) {
+  const extraInfoTable = document.getElementById(`extraInfo${trainId}`);
+  const extraInfoPrice = document.getElementById(`extraInfoPrice${trainId}`);
+  const extraInfoType = document.getElementById(`extraInfoType${trainId}`);
 
   if (extraInfoTable.style.display === 'none') {
-    fetch(`/api/${jaratId}`)
+    fetch(`/api/${trainId}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(response.statusText);
         }
         return response.json();
       })
-      .then((jarat) => {
-        if (jarat) {
+      .then((train) => {
+        if (train) {
           extraInfoTable.style.display = 'table-row';
-          extraInfoAr.innerText = jarat.ar;
-          extraInfoTipus.innerText = jarat.tipus;
+          extraInfoPrice.innerText = train.price;
+          extraInfoType.innerText = train.type;
         }
       })
       .catch((error) => {
         console.error(error);
-        alert('Hiba a járat lekérdezésekor!');
+        alert('Error fetching train information!');
       });
   } else {
     extraInfoTable.style.display = 'none';
   }
 }
 
-function hideExtraInfo(jaratId) {
-  const extraInfoTable = document.getElementById(`extraInfo${jaratId}`);
+function hideExtraInfo(trainId) {
+  const extraInfoTable = document.getElementById(`extraInfo${trainId}`);
   extraInfoTable.style.display = 'none';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   const extraInfoButtons = document.getElementsByClassName('extraInfoButton');
   Array.from(extraInfoButtons).forEach((button) => {
-    const jaratId = button.getAttribute('data-jarat-id');
+    const trainId = button.getAttribute('data-train-id');
     button.addEventListener('click', () => {
-      loadExtraInfo(jaratId);
+      loadExtraInfo(trainId);
     });
   });
 
   const extraInfoCloseButtons = document.getElementsByClassName('extraInfoCloseButton');
   Array.from(extraInfoCloseButtons).forEach((button) => {
-    const jaratId = button.getAttribute('data-jarat-id');
+    const trainId = button.getAttribute('data-train-id');
     button.addEventListener('click', () => {
-      hideExtraInfo(jaratId);
+      hideExtraInfo(trainId);
     });
   });
 });

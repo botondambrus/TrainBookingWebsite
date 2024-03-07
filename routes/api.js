@@ -1,44 +1,44 @@
 import { Router } from 'express';
-import { getJaratById } from '../database/jaratok_db.js';
-import { deleteFoglalas } from '../database/foglalasok_db.js';
+import { getTrainById } from '../database/trains_db.js';
+import { deleteReservation } from '../database/reservations_db.js';
 
 const router = Router();
 
-router.get('/:jaratId', async (req, res) => {
-  const { jaratId } = req.params;
+router.get('/:trainId', async (req, res) => {
+  const { trainId } = req.params;
 
-  if (!jaratId) {
-    return res.status(401).send('Nincs megadva járat ID!');
+  if (!trainId) {
+    return res.status(400).send('Train ID is not provided!');
   }
-  if (jaratId < 0) {
-    return res.status(401).send('Az ID nem lehet negatív!');
+  if (trainId < 0) {
+    return res.status(400).send('ID cannot be negative!');
   }
   try {
-    const jarat = await getJaratById(jaratId);
-    if (!jarat) {
-      return res.status(401).send('Nincs találat!');
+    const train = await getTrainById(trainId);
+    if (!train) {
+      return res.status(400).send('No match found!');
     }
-    return res.status(200).send(jarat[0]);
+    return res.status(200).send(train[0]);
   } catch (err) {
     console.error(err);
-    return res.status(500).send('Szerver hiba!');
+    return res.status(500).send('Server error!');
   }
 });
 
-router.delete('/foglalasTorles/:foglalasId', (req, res) => {
-  const { foglalasId } = req.params;
-  if (!foglalasId) {
-    return res.status(401).send('Nincs megadva foglalás ID!');
+router.delete('/deleteReservation/:reservationId', (req, res) => {
+  const { reservationId } = req.params;
+  if (!reservationId) {
+    return res.status(400).send('Reservation ID is not provided!');
   }
-  if (foglalasId < 0) {
-    return res.status(401).send('Az ID nem lehet negatív!');
+  if (reservationId < 0) {
+    return res.status(400).send('ID cannot be negative!');
   }
   try {
-    deleteFoglalas(foglalasId);
-    return res.status(200).send('Sikeres törlés!');
+    deleteReservation(reservationId);
+    return res.status(200).send('Deletion successful!');
   } catch (err) {
     console.error(err);
-    return res.status(500).send('Szerver hiba!');
+    return res.status(500).send('Server error!');
   }
 });
 

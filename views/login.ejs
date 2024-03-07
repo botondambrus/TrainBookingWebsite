@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -7,13 +7,13 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css">
 
-    <title>Vonattársaság</title>
+    <title>Railway company</title>
 </head>
 
 <body>
     <div class="container mt-4">
         <div class="mb-3 text-center">
-            <h1>Bejelentkezés</h1>
+            <h1>Login</h1>
             <br>
         </div>
     </div>
@@ -24,39 +24,39 @@
                 <div class="container mt-4">
                     <% if (query && query==='success' ) { %>
                         <div class="alert alert-success" role="alert">
-                            Sikeres Regisztráció!
+                            Successful registration!
                         </div>
                         <% } else if (query && query==='error' ) { %>
                             <div class="alert alert-danger" role="alert">
-                                Sikertelen bejelentkezés! <%= message %>
+                                Unsuccessful login! <%= message %>
                             </div>
                             <% } %>
-                                <form method="POST" action="/login">
+                                <form method="POST" action="/auth/login">
                                     <div class="mb-3">
-                                        <label for="felhasznalonev" class="form-label">Felhasználónév:</label>
-                                        <input type="text" name="felhasznalonev" class="form-control"
-                                            id="felhasznalonev" placeholder="Add meg a felhasználónevet!" required>
+                                        <label for="username" class="form-label">Username:</label>
+                                        <input type="text" name="username" class="form-control" id="username"
+                                            placeholder="Enter your username!" required>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="jelszo" class="form-label">Jelszó:</label>
-                                        <input type="password" name="jelszo" class="form-control" id="jelszo"
-                                            placeholder="Add meg a jelszót!" required>
+                                        <label for="password" class="form-label">Password:</label>
+                                        <input type="password" name="password" class="form-control" id="password"
+                                            placeholder="Enter your password!" required>
                                     </div>
 
                                     <div class="mb-3 d-grid">
-                                        <input type="submit" class="btn btn-primary" value="Belépés">
+                                        <input type="submit" class="btn btn-primary" value="Login">
                                     </div>
 
                                 </form>
 
                                 <div class="text-center">
-                                    <span class="text-muted">Nincs még fiókod? <a href="/regisztracio"
-                                            class="text-decoration-none text-primary">Regisztrálj itt.</a></span>
+                                    <span class="text-muted">Don't have an account yet? <a href="/registration"
+                                            class="text-decoration-none text-primary">Register here.</a></span>
                                 </div>
                                 <div class="text-center">
-                                    <span class="text-muted">Vendégként való <a href="/"
-                                            class="text-decoration-none text-primary">belépés</a>.</span>
+                                    <span class="text-muted">Login as a guest <a href="/"
+                                            class="text-decoration-none text-primary">here</a>.</span>
                                 </div>
                 </div>
             </div>

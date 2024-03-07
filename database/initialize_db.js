@@ -1,56 +1,56 @@
 import { executeQuery } from './db.js';
 
 async function initializeDatabase() {
-  const createJaratokTableQuery = `
-      CREATE TABLE IF NOT EXISTS Jaratok (
+  const createTrainsTableQuery = `
+      CREATE TABLE IF NOT EXISTS Trains (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        indulas VARCHAR(30),
-        erkezes VARCHAR(30),
-        indulasiIdo TIME, 
-        erkezesiIdo TIME,
-        nap VARCHAR(30), 
-        ar INT, 
-        tipus VARCHAR(30))
+        departure VARCHAR(30),
+        arrival VARCHAR(30),
+        departureTime TIME, 
+        arrivalTime TIME,
+        day VARCHAR(30), 
+        price INT, 
+        type VARCHAR(30))
         `;
 
-  const createFelhasznalokTableQuery = `
-        CREATE TABLE IF NOT EXISTS Felhasznalok (
+  const createUsersTableQuery = `
+        CREATE TABLE IF NOT EXISTS Users (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            nev VARCHAR(30),
-            felhasznalonev VARCHAR(30),
-            jelszo VARCHAR(200),
+            name VARCHAR(30),
+            username VARCHAR(30),
+            password VARCHAR(200),
             email VARCHAR(30),
             role VARCHAR(30))
         `;
 
-  const createUtasokTableQuery = `
-        CREATE TABLE IF NOT EXISTS Utasok (
+  const createPassengersTableQuery = `
+        CREATE TABLE IF NOT EXISTS Passengers (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            felhasznaloId INT,
-            jaratId INT,
-            datum DATE,
-            FOREIGN KEY (jaratId) REFERENCES Jaratok(id),
-            FOREIGN KEY (felhasznaloId) REFERENCES Felhasznalok(id))
+            userId INT,
+            trainId INT,
+            date DATE,
+            FOREIGN KEY (trainId) REFERENCES Trains(id),
+            FOREIGN KEY (userId) REFERENCES Users(id))
         `;
 
-  const insertDefaultJaratokQuery = `
-      INSERT INTO Jaratok (indulas, erkezes, indulasiIdo, erkezesiIdo, nap, ar, tipus) 
+  const insertDefaultTrainsQuery = `
+      INSERT INTO Trains (departure, arrival, departureTime, arrivalTime, day, price, type) 
       VALUES 
-          ('Budapest', 'London', '10:00', '12:00', 'Hetfo', 100, 'Vonat'),
-          ('Budapest', 'Berlin', '14:00', '16:00', 'Kedd', 120, 'Vonat');
+          ('Budapest', 'London', '10:00', '12:00', 'Monday', 100, 'Intercity'),
+          ('Budapest', 'Berlin', '14:00', '16:00', 'Tuesday', 120, 'Intercity'),;
         `;
 
-  const checkJaratokTableQuery = 'SELECT COUNT(*) AS count FROM Jaratok';
+  const checkTrainsTableQuery = 'SELECT COUNT(*) AS count FROM Trains';
 
   try {
-    await executeQuery(createJaratokTableQuery);
-    await executeQuery(createFelhasznalokTableQuery);
-    await executeQuery(createUtasokTableQuery);
+    await executeQuery(createTrainsTableQuery);
+    await executeQuery(createUsersTableQuery);
+    await executeQuery(createPassengersTableQuery);
 
-    const result = await executeQuery(checkJaratokTableQuery);
+    const result = await executeQuery(checkTrainsTableQuery);
 
     if (result[0].count === 0) {
-      await executeQuery(insertDefaultJaratokQuery);
+      await executeQuery(insertDefaultTrainsQuery);
     }
   } catch (err) {
     console.error(err);
