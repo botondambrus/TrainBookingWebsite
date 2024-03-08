@@ -48,7 +48,7 @@ initializeDatabase()
 
     app.use('/modification', modification);
 
-    app.listen(8080, () => {
+    app.listen(80, () => {
       console.log('Server listening on http://localhost:8080/ ...');
     });
   })
