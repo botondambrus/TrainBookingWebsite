@@ -35,6 +35,16 @@ router.get('/', async (req, res) => {
 
     const trainsWithTransfers = trainsWith1Transfer.concat(trainsWith2Transfers);
 
+    trains.forEach((train) => {
+      train.departureTime = train.departureTime.toLocaleTimeString('hu-HU');
+      train.arrivalTime = train.arrivalTime.toLocaleTimeString('hu-HU');
+    });
+
+    trainsWithTransfers.forEach((train) => {
+      train.departureTime = train.departureTime.toLocaleTimeString('hu-HU');
+      train.arrivalTime = train.arrivalTime.toLocaleTimeString('hu-HU');
+    });
+
     return res.status(200).render('index', {
       trains,
       trainsWithTransfers,

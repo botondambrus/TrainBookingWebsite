@@ -4,11 +4,11 @@ async function getLogin(username) {
   const getLoginQuery = `
         SELECT password, role
         FROM Users
-        WHERE username = ?
+        WHERE username = @username
         `;
 
   try {
-    const result = await executeQuery(getLoginQuery, [username]);
+    const result = await executeQuery(getLoginQuery, { username });
     return result;
   } catch (err) {
     console.error(err);

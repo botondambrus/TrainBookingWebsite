@@ -4,11 +4,10 @@ import { join } from 'path';
 import { initializeDatabase } from './database/initialize_db.js';
 import search from './routes/search.js';
 import addition from './routes/addition.js';
-import api from './routes/api.js';
+import train from './routes/train.js';
 import auth from './routes/auth.js';
 import registration from './routes/registration.js';
 import modification from './routes/modification.js';
-import deleteRoute from './routes/delete.js';
 import reservation from './routes/reservation.js';
 
 const app = express();
@@ -41,15 +40,13 @@ initializeDatabase()
 
     app.use('/addition', addition);
 
-    app.use('/api', api);
+    app.use('/train', train);
 
     app.use('/auth', auth);
 
     app.use('/registration', registration);
 
     app.use('/modification', modification);
-
-    app.use('/delete', deleteRoute);
 
     app.listen(8080, () => {
       console.log('Server listening on http://localhost:8080/ ...');

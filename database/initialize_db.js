@@ -2,30 +2,33 @@ import { executeQuery } from './db.js';
 
 async function initializeDatabase() {
   const createTrainsTableQuery = `
-      CREATE TABLE IF NOT EXISTS Trains (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        departure VARCHAR(30),
-        arrival VARCHAR(30),
+      IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Trains')
+      CREATE TABLE Trains (
+        id INT IDENTITY(1,1) PRIMARY KEY,
+        departure NVARCHAR(30),
+        arrival NVARCHAR(30),
         departureTime TIME, 
         arrivalTime TIME,
-        day VARCHAR(30), 
+        day NVARCHAR(30), 
         price INT, 
-        type VARCHAR(30))
+        type NVARCHAR(30))
         `;
 
   const createUsersTableQuery = `
-        CREATE TABLE IF NOT EXISTS Users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(30),
-            username VARCHAR(30),
-            password VARCHAR(200),
-            email VARCHAR(30),
-            role VARCHAR(30))
+        IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Users')
+        CREATE TABLE Users (
+            id INT IDENTITY(1,1) PRIMARY KEY,
+            name NVARCHAR(30),
+            username NVARCHAR(30),
+            password NVARCHAR(200),
+            email NVARCHAR(30),
+            role NVARCHAR(30))
         `;
 
   const createPassengersTableQuery = `
-        CREATE TABLE IF NOT EXISTS Passengers (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+        IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Passengers')
+        CREATE TABLE Passengers (
+            id INT IDENTITY(1,1) PRIMARY KEY,
             userId INT,
             trainId INT,
             date DATE,
@@ -36,8 +39,8 @@ async function initializeDatabase() {
   const insertDefaultTrainsQuery = `
       INSERT INTO Trains (departure, arrival, departureTime, arrivalTime, day, price, type) 
       VALUES 
-          ('Budapest', 'London', '10:00', '12:00', 'Monday', 100, 'Intercity'),
-          ('Budapest', 'Berlin', '14:00', '16:00', 'Tuesday', 120, 'Intercity'),;
+          (N'Budapest', N'Berlin', '08:00', '10:00', N'Monday', 100, N'Intercity'),
+          (N'Budapest', N'Berlin', '14:00', '16:00', N'Tuesday', 120, N'Intercity');
         `;
 
   const checkTrainsTableQuery = 'SELECT COUNT(*) AS count FROM Trains';
@@ -48,7 +51,6 @@ async function initializeDatabase() {
     await executeQuery(createPassengersTableQuery);
 
     const result = await executeQuery(checkTrainsTableQuery);
-
     if (result[0].count === 0) {
       await executeQuery(insertDefaultTrainsQuery);
     }

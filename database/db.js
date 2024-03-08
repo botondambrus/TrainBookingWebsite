@@ -1,22 +1,29 @@
-import { createPool } from 'mysql2';
+import sql from 'mssql';
 
-const pool = createPool({
-  host: 'localhost',
-  user: 'root',
-  password: 'admin',
-  database: 'vonattarsasag',
-});
+const connectionConfig = {
+  server: 'train-sql.database.windows.net',
+  database: 'train-sql',
+  user: 'boti@train-sql',
+  password: 'Furtos11',
+  options: {
+    encrypt: true,
+    trustServerCertificate: true,
+  },
+};
 
-function executeQuery(query, values) {
-  return new Promise((resolve, reject) => {
-    pool.query(query, values, (err, results) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(results);
-      }
+const pool = new sql.ConnectionPool(connectionConfig);
+
+const executeQuery = async (query, params) => {
+  await pool.connect();
+  const request = pool.request();
+  if (params) {
+    Object.keys(params).forEach((key) => {
+      request.input(key, params[key]);
     });
-  });
-}
+  }
+
+  const result = await request.query(query);
+  return 'recordset' in result ? result.recordset : [];
+};
 
 export { pool, executeQuery };

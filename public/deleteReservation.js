@@ -1,5 +1,5 @@
 function deleteReservation(reservationId) {
-  fetch(`/api/deleteReservation/${reservationId}`, {
+  fetch(`/reservation/deleteReservation/${reservationId}`, {
     method: 'DELETE',
   })
     .then((response) => {

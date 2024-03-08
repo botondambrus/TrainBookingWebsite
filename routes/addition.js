@@ -15,10 +15,7 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const insertId = await insertTrain(departureTime, arrivalTime, departure, arrival, day, type, price);
-    if (insertId == null) {
-      return res.status(500).send('Error occurred while inserting train');
-    }
+    await insertTrain(departureTime, arrivalTime, departure, arrival, day, type, price);
     return res.status(200).redirect('/');
   } catch (error) {
     console.error(error);

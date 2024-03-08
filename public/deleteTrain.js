@@ -1,5 +1,5 @@
 function deleteTrain(trainId) {
-  fetch(`/api/deleteTrain/${trainId}`, {
+  fetch(`/train/deleteTrain/${trainId}`, {
     method: 'DELETE',
   })
     .then((response) => {

@@ -20,7 +20,7 @@
                 </li>
                 <% if ( role==='admin' ) { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="/addition">Addition</a>
+                        <a class="nav-link" href="/addition">Add train</a>
                     </li>
                     <% } %>
                         <% if (role !=='guest' ) { %>
@@ -101,7 +101,6 @@
                         <th>Departure Time</th>
                         <th>Arrival Time</th>
                         <th>Day</th>
-                        <th>Time</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -126,9 +125,6 @@
                             <td>
                                 <%= train.day %>
                             </td>
-                            <td>
-                                <%= train.totalTime %>
-                            </td>
                             <% if (role==='user' || role==='admin' ) { %>
                                 <td>
                                     <a href="/reservation/train/<%=train.id %>"
@@ -137,7 +133,7 @@
                                 <% } %>
                                     <% if (role==='admin' ) { %>
                                         <td>
-                                            <a href="/delete/train/<%=train.id %>"
+                                            <a href="/train/<%=train.id%>/delete"
                                                 class="btn btn-outline-danger">Delete</a>
                                         </td>
                                         <% } %>
@@ -179,9 +175,6 @@
                                     </td>
                                     <td>
                                         <%= train.day %>
-                                    </td>
-                                    <td>
-                                        <%= train.totalTime %>
                                     </td>
                                     <% if (role==='user' || role==='admin' ) { %>
                                         <td>

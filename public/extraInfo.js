@@ -4,7 +4,7 @@ function loadExtraInfo(trainId) {
   const extraInfoType = document.getElementById(`extraInfoType${trainId}`);
 
   if (extraInfoTable.style.display === 'none') {
-    fetch(`/api/${trainId}`)
+    fetch(`/train/${trainId}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(response.statusText);

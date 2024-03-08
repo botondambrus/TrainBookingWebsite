@@ -3,13 +3,13 @@ import { executeQuery } from './db.js';
 async function insertReservation(id, userId, date) {
   const insertReservationQuery = `
       INSERT INTO Passengers (trainId, userId, date)
-      VALUES (?, ?, ?)
+      VALUES (@id, @userId, @date)
       `;
-  const values = [id, userId, date];
+  const values = { id, userId, date };
 
   try {
     const result = await executeQuery(insertReservationQuery, values);
-    return result.insertId;
+    return result;
   } catch (err) {
     console.error(err);
     throw err;
@@ -21,11 +21,11 @@ async function getReservationsByTrainId(id) {
       SELECT Passengers.id, name, email, date
       FROM Passengers
       INNER JOIN Users ON Passengers.userId = Users.id
-      WHERE trainId = ?
+      WHERE trainId = @id
     `;
 
   try {
-    const result = await executeQuery(getReservationsByTrainIdQuery, id);
+    const result = await executeQuery(getReservationsByTrainIdQuery, { id });
     return result;
   } catch (err) {
     console.error(err);
@@ -36,23 +36,24 @@ async function getReservationsByTrainId(id) {
 async function deleteReservation(reservationId) {
   const deleteReservationQuery = `
       DELETE FROM Passengers
-      WHERE id = ?
+      WHERE id = @reservationId
     `;
   try {
-    const result = await executeQuery(deleteReservationQuery, reservationId);
+    const result = await executeQuery(deleteReservationQuery, { reservationId });
     return result;
   } catch (err) {
     console.error(err);
     throw err;
   }
 }
+
 async function deleteReservationsByTrainId(trainId) {
   const deleteReservationsByTrainIdQuery = `
       DELETE FROM Passengers
-      WHERE trainId = ?
+      WHERE trainId = @trainId
     `;
   try {
-    const result = await executeQuery(deleteReservationsByTrainIdQuery, trainId);
+    const result = await executeQuery(deleteReservationsByTrainIdQuery, { trainId });
     return result;
   } catch (err) {
     console.error(err);
@@ -65,10 +66,10 @@ async function getReservationsByUser(username) {
       SELECT trainId, passengers.id, date, departure, arrival, departureTime, arrivalTime, day, type, price
       FROM Passengers
       INNER JOIN Trains ON Passengers.trainId = Trains.id JOIN Users ON Passengers.userId = Users.id
-      WHERE username = ?
+      WHERE username = @username
     `;
   try {
-    const result = await executeQuery(getReservationsByUserQuery, username);
+    const result = await executeQuery(getReservationsByUserQuery, { username });
     return result;
   } catch (err) {
     console.error(err);
@@ -79,10 +80,10 @@ async function getReservationsByUser(username) {
 async function updateReservation(reservationId, date) {
   const updateReservationQuery = `
       UPDATE Passengers
-      SET date = ?
-      WHERE id = ?
+      SET date = @date
+      WHERE id = @reservationId
     `;
-  const values = [date, reservationId];
+  const values = { date, reservationId };
   try {
     const result = await executeQuery(updateReservationQuery, values);
     return result;
@@ -96,10 +97,10 @@ async function getTrainIdByReservation(reservationId) {
   const getTrainIdByReservationQuery = `
       SELECT trainId
       FROM Passengers
-      WHERE id = ?
+      WHERE id = @reservationId
     `;
   try {
-    const result = await executeQuery(getTrainIdByReservationQuery, reservationId);
+    const result = await executeQuery(getTrainIdByReservationQuery, { reservationId });
     return result;
   } catch (err) {
     console.error(err);
@@ -111,10 +112,10 @@ async function getUserIdByReservationId(reservationId) {
   const getUserIdByReservationIdQuery = `
       SELECT userId
       FROM Passengers
-      WHERE id = ?
+      WHERE id = @reservationId
     `;
   try {
-    const result = await executeQuery(getUserIdByReservationIdQuery, reservationId);
+    const result = await executeQuery(getUserIdByReservationIdQuery, { reservationId });
     return result;
   } catch (err) {
     console.error(err);

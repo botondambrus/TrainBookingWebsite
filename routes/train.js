@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { getTrainById } from '../database/trains_db.js';
-import { deleteReservation } from '../database/reservations_db.js';
+import { deleteTrain, getTrainById } from '../database/trains_db.js';
+import { deleteReservationsByTrainId } from '../database/reservations_db.js';
 
 const router = Router();
 
@@ -25,17 +25,26 @@ router.get('/:trainId', async (req, res) => {
   }
 });
 
-router.delete('/deleteReservation/:reservationId', (req, res) => {
-  const { reservationId } = req.params;
-  if (!reservationId) {
-    return res.status(400).send('Reservation ID is not provided!');
+router.get('/:trainId/delete', async (req, res) => {
+  const { trainId } = req.params;
+  const { role } = req.session;
+
+  if (!trainId) {
+    return res.status(400).send('No train ID provided!');
   }
-  if (reservationId < 0) {
+
+  if (trainId < 0) {
     return res.status(400).send('ID cannot be negative!');
   }
+
+  if (role !== 'admin') {
+    return res.status(401).redirect('/auth/login');
+  }
+
   try {
-    deleteReservation(reservationId);
-    return res.status(200).send('Deletion successful!');
+    await deleteReservationsByTrainId(trainId);
+    await deleteTrain(trainId);
+    return res.status(200).redirect('/');
   } catch (err) {
     console.error(err);
     return res.status(500).send('Server error!');

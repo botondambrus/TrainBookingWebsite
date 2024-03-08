@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { insertReservation, getReservationsByUser } from '../database/reservations_db.js';
+import { insertReservation, getReservationsByUser, deleteReservation } from '../database/reservations_db.js';
 import { getUserIdByUsername } from '../database/users_db.js';
 import { getAllByTrainId, getDayTrain } from '../database/trains_db.js';
 
@@ -65,6 +65,10 @@ router.get('/user', async (req, res) => {
   }
   try {
     const reservations = await getReservationsByUser(username);
+    reservations.forEach((reservation) => {
+      reservation.arrivalTime = reservation.arrivalTime.toLocaleTimeString('hu-HU');
+      reservation.departureTime = reservation.departureTime.toLocaleTimeString('hu-HU');
+    });
     return res.render('reservationUser', { reservations, role, username, query, message });
   } catch (err) {
     console.error(err);
@@ -189,6 +193,23 @@ router.post('/trains/:trainsId', async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.redirect('/reservation/user?query=error');
+  }
+});
+
+router.delete('/deleteReservation/:reservationId', (req, res) => {
+  const { reservationId } = req.params;
+  if (!reservationId) {
+    return res.status(400).send('Reservation ID is not provided!');
+  }
+  if (reservationId < 0) {
+    return res.status(400).send('ID cannot be negative!');
+  }
+  try {
+    deleteReservation(reservationId);
+    return res.status(200).send('Deletion successful!');
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Server error!');
   }
 });
 
