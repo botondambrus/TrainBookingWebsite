@@ -1,10 +1,10 @@
 import sql from 'mssql';
 
 const connectionConfig = {
-  server: 'train-sql.database.windows.net',
-  database: 'train-sql',
-  user: 'boti@train-sql',
-  password: 'Furtos11',
+  server: '',
+  database: '',
+  user: '',
+  password: '',
   options: {
     encrypt: true,
     trustServerCertificate: true,
